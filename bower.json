@@ -1,0 +1,23 @@
+{
+  "name": "Agigen-Frontend-Boilerplate",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Agigen/Agigen-Frontend-Boilerplate",
+  "authors": [
+    "Daniel Mauno Pettersson <daniel@agigen.se>",
+    "Oscar Ekholm <oscar@agigen.se>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "libs/bower_components"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "bourbon": "~4.0.2",
+    "inuit-starter-kit": "~0.2.8",
+    "bootstrap-sass-official": "~3.2.0+1"
+  }
+}
