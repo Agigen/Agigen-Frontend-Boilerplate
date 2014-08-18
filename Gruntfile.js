@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = function(grunt) {
     'use strict';
 
@@ -13,7 +15,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         // Config data
-        config: grunt.file.readJSON('frontend-config.json'),
+        config: grunt.file.readJSON(path.join(__dirname, '/frontend-config.json')),
 
         jshint: {
             options: {
