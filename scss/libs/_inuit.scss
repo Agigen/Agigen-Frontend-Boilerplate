@@ -1,0 +1,21 @@
+/**
+ *
+ * Place your Inuit variables here
+ *
+ */
+
+
+/**
+ *
+ * Import all Inuit components you want to use down here
+ *
+ */
+@import '../../libs/bower_components/inuit-defaults/settings.defaults';
+
+@import '../../libs/bower_components/inuit-functions/tools.functions';
+@import '../../libs/bower_components/inuit-mixins/tools.mixins';
+
+@import '../../libs/bower_components/inuit-normalize/generic.normalize';
+@import '../../libs/bower_components/inuit-box-sizing/generic.box-sizing';
+
+@import '../../libs/bower_components/inuit-page/base.page';
