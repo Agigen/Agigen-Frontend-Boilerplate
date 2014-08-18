@@ -1,0 +1,23 @@
+{
+    "dev": {
+        "paths": {
+            "root": ".",
+            "static": "../static",
+
+            "bower": "./libs/bower_components"
+        }
+    },
+
+    "dist": {
+        "paths": {
+            "root": ".",
+            "static": "../static",
+
+            "bower": "./libs/bower_components"
+        }
+    },
+
+    "bowerLibs": [
+        "requirejs/require.js"
+    ]
+}
