@@ -33,18 +33,18 @@ module.exports = function(grunt) {
             bower: {
                 expand: true,
                 flatten: true,
-                cwd: '<%= config.dev.paths.bower %>',
+                cwd: '<%= config.paths.bower %>',
 
                 src: '<%= config.bowerLibs %>',
-                dest: '<%= config.dev.paths.static %>/js/libs'
+                dest: '<%= config.paths.static %>/js/libs'
             },
 
             dev: {
                 expand: true,
-                cwd: '<%= config.dev.paths.root %>/js',
+                cwd: '<%= config.paths.root %>/js',
 
                 src: '**/*.js',
-                dest: '<%= config.dev.paths.static %>/js'
+                dest: '<%= config.paths.static %>/js'
             }
         },
 
@@ -54,7 +54,7 @@ module.exports = function(grunt) {
                 files: [{
                     dot: true,
                     src: [
-                        '<%= config.dist.paths.static %>/css/*'
+                        '<%= config.paths.static %>/css/*'
                     ]
                 }]
             }
@@ -68,10 +68,10 @@ module.exports = function(grunt) {
 
                 files: [{
                     expand: true,
-                    cwd: '<%= config.dev.paths.root %>',
+                    cwd: '<%= config.paths.root %>',
 
                     src: [ 'scss/main.scss' ],
-                    dest: '<%= config.dev.paths.static %>/css',
+                    dest: '<%= config.paths.static %>/css',
                     ext: '.css',
 
                     flatten: true
@@ -86,10 +86,10 @@ module.exports = function(grunt) {
 
                 files: [{
                     expand: true,
-                    cwd: '<%= config.dist.paths.root %>',
+                    cwd: '<%= config.paths.root %>',
 
                     src: [ 'scss/main.scss' ],
-                    dest: '<%= config.dist.paths.static %>/css',
+                    dest: '<%= config.paths.static %>/css',
                     ext: '.css',
 
                     flatten: true
@@ -99,7 +99,7 @@ module.exports = function(grunt) {
 
         watch: {
             dev: {
-                files: [ '<%= config.dev.paths.root %>/scss/**', '<%= config.dev.paths.root %>/js/**' ],
+                files: [ '<%= config.paths.root %>/scss/**', '<%= config.paths.root %>/js/**' ],
                 tasks: [ 'dev-build' ]
             },
             gruntfile: {

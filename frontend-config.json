@@ -1,20 +1,9 @@
 {
-    "dev": {
-        "paths": {
-            "root": ".",
-            "static": "../static",
+    "paths": {
+        "root": ".",
+        "static": "../static",
 
-            "bower": "./libs/bower_components"
-        }
-    },
-
-    "dist": {
-        "paths": {
-            "root": ".",
-            "static": "../static",
-
-            "bower": "./libs/bower_components"
-        }
+        "bower": "./libs/bower_components"
     },
 
     "bowerLibs": [
