@@ -1,0 +1,20 @@
+{
+    "boss": true,
+    "browser": true,
+    "curly": true,
+    "devel": true,
+    "eqnull": true,
+    "eqeqeq": true,
+    "latedef": true,
+    "nonbsp": true,
+    "newcap": true,
+    "strict": true,
+    "undef": true,
+    "unused": true,
+    "node": true,
+    "predef": [ // Extra globals.
+        "module"
+    ],
+    "globals": {
+    }
+}

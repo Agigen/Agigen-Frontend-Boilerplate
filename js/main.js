@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  *
  * main
@@ -6,19 +8,4 @@
  *
  */
 
-// Define your main file's define name
-var entryPointName = 'main';
-
-require.config({
-    /**
-     * Put your RequireJS config here
-     */
-});
-
-define(entryPointName, [
-    /**
-     * Put your main dependencies here
-     */
-], function() {
-    'use strict';
-});
+console.log('main.js')
