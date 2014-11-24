@@ -35,7 +35,9 @@ var gulpif = require('gulp-if');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var sass = require('gulp-ruby-sass');
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var streamify = require('gulp-streamify');
 var uglify = require('gulp-uglify');
 var del = require('del');
 var yargs = require('yargs');
@@ -58,14 +60,17 @@ gulp.task('clean_styles', function(cb) {
 
 // Copys all the user created scripts
 gulp.task('scripts', ['clean_scripts'], function() {
-    return gulp.src(sources.browserify.files)
-        .pipe(browserify({
-            insertGlobals : true,
-            debug : !production,
-            paths: ['./node_modules','./frontend/js/'],
-        }))
+    browserify({
+        entries: sources.browserify.files,
+        insertGlobals : true,
+        debug : !production,
+    })
         .on('error', function (err) { console.log(err.message); })
-        .pipe(gulpif(production, uglify()))
+        .bundle()
+        .on('error', function (err) { console.log(err.message); })
+        .pipe(source('main.js'))
+        .on('error', function (err) { console.log(err.message); })
+        .pipe(gulpif(production, streamify(uglify())))
         .on('error', function (err) { console.log(err.message); })
         .pipe(gulp.dest(destinations.scripts));
 });
