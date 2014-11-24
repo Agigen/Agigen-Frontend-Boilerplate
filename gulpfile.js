@@ -33,6 +33,7 @@ var lint = [
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var jshint = require('gulp-jshint');
+var notify = require("gulp-notify");
 var stylish = require('jshint-stylish');
 var sass = require('gulp-ruby-sass');
 var browserify = require('browserify');
@@ -44,6 +45,11 @@ var yargs = require('yargs');
 var inline_base64 = require('gulp-inline-base64');
 
 var production = (yargs.argv.environment === 'production');
+
+var handleError = notify.onError({
+    title: "Compile Error",
+    message: "<%= error.message %>"
+});
 
 // Cleanup tasks
 gulp.task('clean', ['clean_scripts', 'clean_styles'], function(cb) {
@@ -65,13 +71,13 @@ gulp.task('scripts', ['clean_scripts'], function() {
         insertGlobals : true,
         debug : !production,
     })
-        .on('error', function (err) { console.log(err.message); })
+        .on('error', handleError)
         .bundle()
-        .on('error', function (err) { console.log(err.message); })
+        .on('error', handleError)
         .pipe(source('main.js'))
-        .on('error', function (err) { console.log(err.message); })
+        .on('error', handleError)
         .pipe(gulpif(production, streamify(uglify())))
-        .on('error', function (err) { console.log(err.message); })
+        .on('error', handleError)
         .pipe(gulp.dest(destinations.scripts));
 });
 
@@ -82,12 +88,12 @@ gulp.task('styles', ['clean_styles'], function(){
         .pipe(sass({
             style: production ? 'compressed' : 'expanded',
         }))
-        .on('error', function (err) { console.log(err.message); })
+        .on('error', handleError)
         .pipe(inline_base64({
             baseDir: destinations.styles,
             maxSize: 14 * 1024,
         }))
-        .on('error', function (err) { console.log(err.message); })
+        .on('error', handleError)
         .pipe(gulp.dest(destinations.styles));
 });
 
