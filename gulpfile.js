@@ -35,7 +35,7 @@ var gulpif = require('gulp-if');
 var jshint = require('gulp-jshint');
 var notify = require("gulp-notify");
 var stylish = require('jshint-stylish');
-var sass = require('gulp-ruby-sass');
+var sass = require('gulp-sass');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var streamify = require('gulp-streamify');
@@ -43,6 +43,7 @@ var uglify = require('gulp-uglify');
 var del = require('del');
 var yargs = require('yargs');
 var inline_base64 = require('gulp-inline-base64');
+var sourcemaps = require('gulp-sourcemaps');
 
 var production = (yargs.argv.environment === 'production');
 
@@ -84,10 +85,12 @@ gulp.task('scripts', ['clean_scripts'], function() {
 // Generate css files from scss
 gulp.task('styles', ['clean_styles'], function(){
     return gulp.src(sources.scss.files)
-        //.pipe(flatten())
+        .pipe(sourcemaps.init())
         .pipe(sass({
             style: production ? 'compressed' : 'expanded',
         }))
+        .on('error', handleError)
+        .pipe(sourcemaps.write('./maps'))
         .on('error', handleError)
         .pipe(inline_base64({
             baseDir: destinations.styles,
