@@ -36,21 +36,30 @@ var jshint = require('gulp-jshint');
 var notify = require("gulp-notify");
 var stylish = require('jshint-stylish');
 var sass = require('gulp-sass');
-var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var streamify = require('gulp-streamify');
+var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 var del = require('del');
 var yargs = require('yargs');
+var flatten = require('gulp-flatten');
 var inline_base64 = require('gulp-inline-base64');
 var sourcemaps = require('gulp-sourcemaps');
+var merge = require('merge-stream');
 
 var production = (yargs.argv.environment === 'production');
+var verbose = yargs.argv.verbose;
 
 var handleError = notify.onError({
     title: "Compile Error",
     message: "<%= error.message %>"
 });
+
+// Handler for browserify
+var browserifyHandleError = function(err){
+    handleError(err);
+    this.end();
+};
 
 // Cleanup tasks
 gulp.task('clean', ['clean_scripts', 'clean_styles'], function(cb) {
@@ -67,14 +76,13 @@ gulp.task('clean_styles', function(cb) {
 
 // Copys all the user created scripts
 gulp.task('scripts', ['clean_scripts'], function() {
-    browserify({
+    return browserify({
         entries: sources.browserify.files,
         insertGlobals : true,
         debug : !production,
     })
-        .on('error', handleError)
         .bundle()
-        .on('error', handleError)
+        .on('error', browserifyHandleError)
         .pipe(source('main.js'))
         .on('error', handleError)
         .pipe(gulpif(production, streamify(uglify())))
@@ -87,7 +95,7 @@ gulp.task('styles', ['clean_styles'], function(){
     return gulp.src(sources.scss.files)
         .pipe(sourcemaps.init())
         .pipe(sass({
-            style: production ? 'compressed' : 'expanded',
+            outputStyle: production ? 'compressed' : 'nested',
         }))
         .on('error', handleError)
         .pipe(sourcemaps.write('./maps'))
@@ -95,6 +103,7 @@ gulp.task('styles', ['clean_styles'], function(){
         .pipe(inline_base64({
             baseDir: destinations.styles,
             maxSize: 14 * 1024,
+            debug: verbose,
         }))
         .on('error', handleError)
         .pipe(gulp.dest(destinations.styles));
