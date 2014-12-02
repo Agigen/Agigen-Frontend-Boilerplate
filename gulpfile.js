@@ -42,7 +42,6 @@ var browserify = require('browserify');
 var uglify = require('gulp-uglify');
 var del = require('del');
 var yargs = require('yargs');
-var flatten = require('gulp-flatten');
 var inline_base64 = require('gulp-inline-base64');
 var sourcemaps = require('gulp-sourcemaps');
 var merge = require('merge-stream');
