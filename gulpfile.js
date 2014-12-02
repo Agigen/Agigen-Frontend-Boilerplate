@@ -6,7 +6,7 @@ var sources = {
             'frontend/js/**/*.js'
         ],
         files: [
-            'frontend/js/main.js'
+            './frontend/js/main.js'
         ]
     },
     scss: {
@@ -44,7 +44,7 @@ var del = require('del');
 var yargs = require('yargs');
 var inline_base64 = require('gulp-inline-base64');
 var sourcemaps = require('gulp-sourcemaps');
-var merge = require('merge-stream');
+//var merge = require('merge-stream');
 
 var production = (yargs.argv.environment === 'production');
 var verbose = yargs.argv.verbose;
