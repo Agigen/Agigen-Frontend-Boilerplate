@@ -17,9 +17,8 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "bourbon": "~4.0.2",
-    "inuit-starter-kit": "~0.2.8",
-    "requirejs": "~2.1.14",
-    "bootstrap-sass-official": "~3.2.0"
+    "bourbon": "latest",
+    "inuit-starter-kit": "latest",
+    "bootstrap-sass-official": "latest"
   }
 }
