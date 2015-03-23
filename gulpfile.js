@@ -3,18 +3,18 @@
 var sources = {
     browserify: {
         watch: [
-            'frontend/js/**/*.js'
+            'static-src/js/**/*.js'
         ],
         files: [
-            './frontend/js/main.js'
+            './static-src/js/main.js'
         ]
     },
     scss: {
         watch: [
-            'frontend/scss/**/*',
+            'static-src/scss/**/*',
         ],
         files: [
-            'frontend/scss/**/*',
+            'static-src/scss/**/*',
         ]
     },
 };
@@ -26,7 +26,7 @@ var destinations = {
 
 var lint = [
     'gulpfile.js',
-    'frontend/js/**/*.js',
+    'static-src/js/**/*.js',
 ];
 
 
