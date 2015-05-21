@@ -15,6 +15,3 @@ Then, you'll be fully ready to start writing some code, so go ahead and run the 
 
     $ gulp
 
-
-#### Remarks
-- For the time being, RequireJS will always be included with the boilerplate

@@ -3,30 +3,41 @@
 var sources = {
     browserify: {
         watch: [
-            'static-source/js/**/*.js'
+            'static-source/public/js/**/*.js',
+            'static-source/admin/js/**/*.js'
         ],
         files: [
-            './static-source/js/main.js'
+            './static-source/admin/js/main.js'
+        ],
+        adminFiles: [
+            './static-source/admin/js/main.js'
         ]
     },
     scss: {
         watch: [
-            'static-source/scss/**/*',
+            'static-source/public/scss/**/*',
+            'static-source/admin/scss/**/*',
         ],
         files: [
-            'static-source/scss/**/*',
+            'static-source/public/scss/**/*',
+        ],
+        adminFiles: [
+            'static-source/admin/scss/**/*',
         ]
     },
 };
 
 var destinations = {
     scripts: 'static/js/',
-    styles: 'static/css/'
+    styles: 'static/css/',
+    adminScripts: 'static/admin/js/',
+    adminStyles: 'static/admin/css/'
 };
 
 var lint = [
     'gulpfile.js',
-    'static-source/js/**/*.js',
+    'static-source/public/js/**/*.js',
+    'static-source/admin/js/**/*.js',
 ];
 
 
@@ -61,16 +72,21 @@ var browserifyHandleError = function(err){
 };
 
 // Cleanup tasks
-gulp.task('clean', ['clean_scripts', 'clean_styles'], function(cb) {
+gulp.task('clean', ['clean_scripts', 'clean_styles', 'clean_admin_styles', 'clean_admin_scripts'], function(cb) {
     cb();
 });
 
 gulp.task('clean_scripts', function(cb) {
     del(['static/js/**/*'], cb);
 });
-
+gulp.task('clean_admin_scripts', function(cb) {
+    del(['static/admin/js/**/*'], cb);
+});
 gulp.task('clean_styles', function(cb) {
     del(['static/css/**/*'], cb);
+});
+gulp.task('clean_admin_styles', function(cb) {
+    del(['static/admin/css/**/*'], cb);
 });
 
 // Copys all the user created scripts
@@ -87,6 +103,20 @@ gulp.task('scripts', ['clean_scripts'], function() {
         .pipe(gulpif(production, streamify(uglify())))
         .on('error', handleError)
         .pipe(gulp.dest(destinations.scripts));
+});
+gulp.task('admin-scripts', ['clean_admin_scripts'], function() {
+    return browserify({
+        entries: sources.browserify.adminFiles,
+        insertGlobals : true,
+        debug : !production,
+    })
+        .bundle()
+        .on('error', browserifyHandleError)
+        .pipe(source('main.js'))
+        .on('error', handleError)
+        .pipe(gulpif(production, streamify(uglify())))
+        .on('error', handleError)
+        .pipe(gulp.dest(destinations.adminScripts));
 });
 
 // Generate css files from scss
@@ -108,6 +138,24 @@ gulp.task('styles', ['clean_styles'], function(){
         .pipe(gulp.dest(destinations.styles));
 });
 
+gulp.task('admin-styles', ['clean_admin_styles'], function(){
+    return gulp.src(sources.scss.adminFiles)
+        .pipe(sourcemaps.init())
+        .pipe(sass({
+            outputStyle: production ? 'compressed' : 'nested',
+        }))
+        .on('error', handleError)
+        .pipe(sourcemaps.write('./maps'))
+        .on('error', handleError)
+        .pipe(inline_base64({
+            baseDir: destinations.adminStyles,
+            maxSize: 14 * 1024,
+            debug: verbose,
+        }))
+        .on('error', handleError)
+        .pipe(gulp.dest(destinations.adminStyles));
+});
+
 gulp.task('lint', function() {
     return gulp.src(lint)
       .pipe(jshint('.jshintrc'))
@@ -117,13 +165,13 @@ gulp.task('lint', function() {
 
 // Watch the folders
 gulp.task('watch', function() {
-    gulp.watch(sources.browserify.watch, ['lint', 'scripts']);
-    gulp.watch(sources.scss.watch, ['styles']);
+    gulp.watch(sources.browserify.watch, ['lint', 'scripts', 'admin-scripts']);
+    gulp.watch(sources.scss.watch, ['styles', 'admin-styles']);
 });
 
 
 // build task
-gulp.task('build', ['lint', 'scripts', 'styles']);
+gulp.task('build', ['lint', 'scripts', 'styles', 'admin-scripts', 'admin-styles']);
 
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['build', 'watch']);
