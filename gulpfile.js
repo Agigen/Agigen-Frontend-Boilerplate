@@ -37,10 +37,10 @@ var sources = {
             'static-source/admin/scss/**/*',
         ],
         files: [
-            'static-source/public/scss/**/*',
+            'static-source/public/scss/**/*.scss',
         ],
         adminFiles: [
-            'static-source/admin/scss/**/*',
+            'static-source/admin/scss/**/*.scss',
         ]
     },
 };
