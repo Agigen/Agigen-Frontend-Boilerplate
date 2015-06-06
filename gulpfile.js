@@ -1,5 +1,23 @@
 'use strict';
 
+var gulp = require('gulp');
+var gulpif = require('gulp-if');
+var jshint = require('gulp-jshint');
+var notify = require("gulp-notify");
+var stylish = require('jshint-stylish');
+var sass = require('gulp-sass');
+var source = require('vinyl-source-stream');
+var streamify = require('gulp-streamify');
+var browserify = require('browserify');
+var uglify = require('gulp-uglify');
+var del = require('del');
+var yargs = require('yargs');
+var inline_base64 = require('gulp-inline-base64');
+var sourcemaps = require('gulp-sourcemaps');
+var autoprefixer = require('autoprefixer-core');
+var postcss = require('gulp-postcss');
+//var merge = require('merge-stream');
+
 var sources = {
     browserify: {
         watch: [
@@ -40,23 +58,6 @@ var lint = [
     'static-source/admin/js/**/*.js',
 ];
 
-
-var gulp = require('gulp');
-var gulpif = require('gulp-if');
-var jshint = require('gulp-jshint');
-var notify = require("gulp-notify");
-var stylish = require('jshint-stylish');
-var sass = require('gulp-sass');
-var source = require('vinyl-source-stream');
-var streamify = require('gulp-streamify');
-var browserify = require('browserify');
-var uglify = require('gulp-uglify');
-var del = require('del');
-var yargs = require('yargs');
-var inline_base64 = require('gulp-inline-base64');
-var sourcemaps = require('gulp-sourcemaps');
-//var merge = require('merge-stream');
-
 var production = (yargs.argv.environment === 'production');
 var verbose = yargs.argv.verbose;
 
@@ -64,6 +65,12 @@ var handleError = notify.onError({
     title: "Compile Error",
     message: "<%= error.message %>"
 });
+
+var postcssProcessors = [
+    autoprefixer({
+        browsers: ['> 1%', 'last 2 versions', 'Firefox ESR', 'Opera 12.1', 'IE 9'],
+    })
+];
 
 // Handler for browserify
 var browserifyHandleError = function(err){
@@ -127,13 +134,15 @@ gulp.task('styles', ['clean_styles'], function(){
             outputStyle: production ? 'compressed' : 'nested',
         }))
         .on('error', handleError)
-        .pipe(sourcemaps.write('./maps'))
-        .on('error', handleError)
         .pipe(inline_base64({
             baseDir: destinations.styles,
             maxSize: 14 * 1024,
             debug: verbose,
         }))
+        .on('error', handleError)
+        .pipe(postcss(postcssProcessors))
+        .on('error', handleError)
+        .pipe(sourcemaps.write('./maps'))
         .on('error', handleError)
         .pipe(gulp.dest(destinations.styles));
 });
@@ -145,13 +154,15 @@ gulp.task('admin-styles', ['clean_admin_styles'], function(){
             outputStyle: production ? 'compressed' : 'nested',
         }))
         .on('error', handleError)
-        .pipe(sourcemaps.write('./maps'))
-        .on('error', handleError)
         .pipe(inline_base64({
             baseDir: destinations.adminStyles,
             maxSize: 14 * 1024,
             debug: verbose,
         }))
+        .on('error', handleError)
+        .pipe(postcss(postcssProcessors))
+        .on('error', handleError)
+        .pipe(sourcemaps.write('./maps'))
         .on('error', handleError)
         .pipe(gulp.dest(destinations.adminStyles));
 });
