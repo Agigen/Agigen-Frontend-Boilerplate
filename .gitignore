@@ -1,4 +1,6 @@
 node_modules
 bower_components
+static/admin/js
+static/admin/css
 static/js
 static/css
