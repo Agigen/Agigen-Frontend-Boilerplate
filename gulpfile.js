@@ -7,7 +7,7 @@ var sources = {
             'static-source/admin/js/**/*.js'
         ],
         files: [
-            './static-source/admin/js/main.js'
+            './static-source/public/js/main.js'
         ],
         adminFiles: [
             './static-source/admin/js/main.js'
